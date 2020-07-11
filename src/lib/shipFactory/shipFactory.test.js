@@ -1,5 +1,21 @@
 import shipFactory from './shipFactory';
 
-it('shipFactory.js test', () => {
-  expect(shipFactory(3)).toBe(3);
+const mockShip = shipFactory('cruiser');
+
+it('factory function creates an object', () => {
+  expect(typeof mockShip).toEqual('object');
+});
+
+it('ship is defined with proper length', () => {
+  expect(mockShip.getLength()).toBe(3);
+});
+
+it('hit()', () => {
+  expect(mockShip.hit(2)).toEqual([null, null, true]);
+});
+it('isSunk()', () => {
+  for (let i = 0; i < mockShip.getLength(); i++) {
+    mockShip.hit(i);
+  }
+  expect(mockShip.isSunk()).toBeTruthy();
 });
