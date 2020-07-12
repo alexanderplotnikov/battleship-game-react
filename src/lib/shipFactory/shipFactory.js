@@ -13,16 +13,19 @@ const shipFactory = (type) => {
       ? 2
       : new Error('incorrect type of ship');
   const ship = {
+    name: type,
     length: size,
     hitStatus: new Array(size).fill(null),
   };
+  const getName = () => ship.name;
   const getLength = () => ship.length;
   const hit = (pos) => {
     ship.hitStatus[pos] = true;
     return ship.hitStatus;
   };
+  const isHit = (pos) => ship.hitStatus[pos];
   const isSunk = () => !ship.hitStatus.includes(null);
-  return { getLength, hit, isSunk };
+  return { getLength, hit, isSunk, isHit, getName };
 };
 
 export default shipFactory;
