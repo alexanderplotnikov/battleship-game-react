@@ -16,10 +16,9 @@ it('constructs 10 by 10 battlefield', () => {
 
 it('ship placed on gameboard', () => {
   const mockBoard = gameboardFactory();
-  const ship = shipMock('carrier');
   const loc = [8, 3];
-  mockBoard.placeShip(loc, ship);
-  expect(mockBoard.getBoard()[8][7].ship.getLength()).toBe(ship.getLength());
+  mockBoard.placeShip(loc, 'carrier');
+  expect(mockBoard.getBoard()[8][7].ship.getLength()).toBe(5);
 });
 
 it('target missed', () => {
@@ -29,12 +28,10 @@ it('target missed', () => {
 });
 it('target hit carrier', () => {
   const mockBoard = gameboardFactory();
-  const ship = shipMock('carrier');
-  const ship2 = shipMock('cruiser');
   const loc = [8, 3];
   const loc2 = [7, 3];
-  mockBoard.placeShip(loc, ship);
-  mockBoard.placeShip(loc2, ship2);
+  mockBoard.placeShip(loc, 'carrier');
+  mockBoard.placeShip(loc2, 'cruiser');
   expect(mockBoard.getBoard()[8][3].ship.getName()).toMatch('carrier');
   mockBoard.receiveAttack([8, 3]);
   mockBoard.receiveAttack([8, 5]);
@@ -46,14 +43,13 @@ it('target hit carrier', () => {
 });
 it('target is sunk', () => {
   const mockBoard = gameboardFactory();
-  const ship = shipMock('cruiser');
   const loc = [0, 0];
-  mockBoard.placeShip(loc, ship);
+  mockBoard.placeShip(loc, 'cruiser');
   mockBoard.receiveAttack([0, 0]);
   mockBoard.receiveAttack([0, 1]);
   mockBoard.receiveAttack([6, 1]);
   const isSunk = mockBoard.receiveAttack([0, 2]);
-  expect(ship.isSunk()).toBeTruthy();
+  expect(mockBoard.getBoard()[0][0].ship.isSunk()).toBeTruthy();
   expect(mockBoard.getBoard()[6][1]).toMatch('miss');
   expect(mockBoard.getBoard()[7][1]).toEqual(null);
 });

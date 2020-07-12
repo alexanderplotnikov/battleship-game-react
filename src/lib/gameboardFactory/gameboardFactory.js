@@ -1,3 +1,5 @@
+import Ship from '../shipFactory/shipFactory';
+
 const gameboardFactory = () => {
   let i = 0;
   const board = new Array(10);
@@ -7,8 +9,9 @@ const gameboardFactory = () => {
   const missedAttack = [];
   const getBoard = () => board;
 
-  const placeShip = (loc, ship) => {
-    const isHorizontal = true;
+  const placeShip = (loc, type, orientation = 'horizontal') => {
+    const ship = Ship(type);
+    const isHorizontal = orientation == 'horizontal' ? true : false;
     const placeble = isPlaceble(loc, ship.getLength(), isHorizontal);
     const size = ship.getLength();
     const [row, col] = loc;
@@ -36,7 +39,7 @@ const gameboardFactory = () => {
       }
     } else {
       for (let i = 0; i < size; i++) {
-        if (!board[row + i][col] === null) {
+        if (board[row + i][col] === null) {
           coordinates.push([row + i, col]);
         } else {
           return false;
