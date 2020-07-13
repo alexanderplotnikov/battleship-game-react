@@ -1,7 +1,6 @@
 import Ship from '../shipFactory/shipFactory';
 
 const gameboardFactory = () => {
-  let i = 0;
   const board = new Array(10);
   for (let i = 0; i < board.length; i++) {
     board[i] = new Array(10).fill(null);
@@ -11,16 +10,12 @@ const gameboardFactory = () => {
 
   const placeShip = (loc, type, orientation = 'horizontal') => {
     const ship = Ship(type);
-    const isHorizontal = orientation == 'horizontal' ? true : false;
+    const isHorizontal = orientation === 'horizontal' ? true : false;
     const placeble = isPlaceble(loc, ship.getLength(), isHorizontal);
-    const size = ship.getLength();
-    const [row, col] = loc;
 
     if (placeble) {
       placeble.forEach(([row, col], i) => {
         board[row][col] = { index: i, ship };
-        // each square should contain info about the ship
-        // reference to factory {index: i, ship: carrier}
       });
     } else {
       return 'Cannot place ship, please try again';

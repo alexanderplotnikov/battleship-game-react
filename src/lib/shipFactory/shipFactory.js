@@ -1,15 +1,15 @@
 const shipFactory = (type) => {
   let size = 0;
   size =
-    type == 'carrier'
+    type === 'carrier'
       ? 5
-      : type == 'battleship'
+      : type === 'battleship'
       ? 4
-      : type == 'cruiser'
+      : type === 'cruiser'
       ? 3
-      : type == 'submarine'
+      : type === 'submarine'
       ? 3
-      : type == 'destroyer'
+      : type === 'destroyer'
       ? 2
       : new Error('incorrect type of ship');
   const ship = {
