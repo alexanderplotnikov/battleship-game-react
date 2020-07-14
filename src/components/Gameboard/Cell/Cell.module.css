@@ -1,0 +1,11 @@
+.Miss {
+  background-color: grey;
+}
+
+.Hit {
+  background-color: red;
+}
+
+.Player {
+  background-color: blue;
+}

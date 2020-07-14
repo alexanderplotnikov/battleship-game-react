@@ -5,10 +5,24 @@ const gameboardFactory = () => {
   for (let i = 0; i < board.length; i++) {
     board[i] = new Array(10).fill(null);
   }
-  const missedAttack = [];
+  const availableHits = board
+    .map((row, r) => {
+      return row.map((_, c) => {
+        return [r, c];
+      });
+    })
+    .reduce((arr, el) => {
+      return arr.concat(el);
+    }, []);
+  const getShots = () => [...availableHits];
   const getBoard = () => board;
 
   const placeShip = (loc, type, orientation = 'horizontal') => {
+    if (!type) {
+      throw new Error('Missing type of ship');
+    } else if (!loc) {
+      throw new Error('Missing loc for ship placement');
+    }
     const ship = Ship(type);
     const isHorizontal = orientation === 'horizontal' ? true : false;
     const placeble = isPlaceble(loc, ship.getLength(), isHorizontal);
@@ -44,15 +58,20 @@ const gameboardFactory = () => {
     return coordinates;
   };
   const receiveAttack = ([row, col]) => {
+    availableHits.forEach((arr, i) => {
+      if (arr[0] === row && arr[1] === col) {
+        availableHits.splice(i, 1);
+      }
+    });
+
     if (board[row][col] === null) {
       board[row][col] = 'miss';
-      missedAttack.push([row][col]);
     } else if (typeof board[row][col] === 'object') {
       const index = board[row][col].index;
       return board[row][col].ship.hit(index);
     }
   };
-  return { getBoard, placeShip, receiveAttack };
+  return { getBoard, placeShip, receiveAttack, getShots };
 };
 
 export default gameboardFactory;
