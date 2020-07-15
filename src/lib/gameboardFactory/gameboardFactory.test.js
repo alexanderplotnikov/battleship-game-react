@@ -1,5 +1,4 @@
 import gameboardFactory from './gameboardFactory';
-import shipMock from '../shipFactory/shipFactory';
 
 it('constructs 10 by 10 battlefield', () => {
   const mockBoard = gameboardFactory();

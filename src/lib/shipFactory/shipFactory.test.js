@@ -6,7 +6,7 @@ it('factory function creates an object', () => {
   expect(typeof mockShip).toEqual('object');
 });
 
-it('ship is defined with proper length', () => {
+it('defines cruser with length 3', () => {
   expect(mockShip.getLength()).toBe(3);
 });
 
