@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Gameboard.module.css';
 import Cell from './Cell/Cell';
 
-const gameboard = (props) => {
+const Gameboard = (props) => {
   const cells = props.board.map((row, r) => {
     return row.map((col, c) => {
       return (
@@ -13,13 +13,14 @@ const gameboard = (props) => {
           key={r.toString() + c}
           content={col}
           isShip={col}
+          placeShip={props.placeShip}
           playerBoard={props.playerBoard}
           disabled={props.disabled}
-        ></Cell>
+        />
       );
     });
   });
   return <div className={classes.Gameboard}>{cells}</div>;
 };
 
-export default gameboard;
+export default Gameboard;

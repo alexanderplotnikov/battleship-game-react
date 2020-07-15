@@ -5,12 +5,6 @@
   border: 1px solid black;
   box-sizing: border-box;
 }
-.Gameboard > div {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
 .Gameboard > div:hover {
   border: 2px dotted red;
   cursor: crosshair;
