@@ -9,11 +9,32 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 class Battleship extends Component {
   player = playerFactory();
   comp = playerFactory();
+
   state = {
     playerBoard: this.player.getBoard(),
     compBoard: this.comp.getBoard(),
     playerTurn: true,
     compTurn: false,
+    ships: [
+      { name: 'carrier', size: 5 },
+      { name: 'battleship', size: 4 },
+      { name: 'cruiser', size: 3 },
+      { name: 'submarine', size: 3 },
+      { name: 'destroyer', size: 2 },
+    ],
+  };
+  resetState = {};
+  componentDidMount() {
+    this.resetState = { ...this.state };
+  }
+  handleReset = () => {
+    this.player = { ...playerFactory() };
+    this.comp = { ...playerFactory() };
+    this.setState(this.resetState);
+    this.setState({
+      playerBoard: this.player.getBoard(),
+      compBoard: this.comp.getBoard(),
+    });
   };
   handleAttack = (loc) => {
     this.player.attack(this.comp, loc);
@@ -21,7 +42,11 @@ class Battleship extends Component {
     this.takeTurnHandler();
   };
   handlePlaceShip = (loc, type, orientation) => {
-    this.player.placeShip(loc, type, orientation);
+    const success = this.player.placeShip(loc, type, orientation);
+    this.setState({
+      playerBoard: this.player.getBoard(),
+    });
+    return success;
   };
   computerAttack = () => {
     const availableHits = this.player.getShots();
@@ -35,21 +60,36 @@ class Battleship extends Component {
       compTurn: !this.state.compTurn,
     });
   };
+  handleShipSlection = (type) => {
+    this.state.ships.forEach((ship, i) => {
+      if (Object.values(ship)[0] === type) {
+        const newShips = [...this.state.ships];
+        newShips.splice(i, 1);
+        this.setState({ ships: newShips });
+      }
+    });
+  };
   render() {
-    this.player.placeShip([0, 0], 'carrier');
     return (
       <div>
+        <button onClick={this.handleReset}>Reset Game</button>
         <div>{this.state.playerTurn ? 'Player' : "Computer's"} turn</div>
         <DndProvider backend={HTML5Backend}>
           <div className={classes.BattleshipControls}></div>
-          <BattleshipControls />
+          <BattleshipControls ships={this.state.ships} />
           <Gameboard
             board={this.state.playerBoard}
             placeShip={this.handlePlaceShip}
+            selected={this.handleShipSlection}
             playerBoard
             disabled
           />
-          <Gameboard board={this.state.compBoard} attack={this.handleAttack} />
+          <Gameboard
+            disabled={this.state.ships.length}
+            board={this.state.compBoard}
+            attack={this.handleAttack}
+            placeShip={() => false}
+          />
         </DndProvider>
       </div>
     );

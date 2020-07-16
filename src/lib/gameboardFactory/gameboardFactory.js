@@ -31,8 +31,9 @@ const gameboardFactory = () => {
       placeble.forEach(([row, col], i) => {
         board[row][col] = { index: i, ship };
       });
+      return true;
     } else {
-      return 'Cannot place ship, please try again';
+      return false;
     }
   };
   const isPlaceble = (loc, size, isHorizontal) => {

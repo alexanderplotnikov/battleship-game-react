@@ -13,6 +13,7 @@ const Gameboard = (props) => {
           key={r.toString() + c}
           content={col}
           isShip={col}
+          removeSelection={props.selected}
           placeShip={props.placeShip}
           playerBoard={props.playerBoard}
           disabled={props.disabled}

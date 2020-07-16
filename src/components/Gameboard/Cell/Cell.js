@@ -11,9 +11,25 @@ const Cell = (props) => {
       setActive(false);
     }
   };
+  // const canPlace = ([row, col], size, orientation) => {
+  //   if (orientation === 'horizontal') {
+  //     return col + size - 1 < 10;
+  //   } else {
+  //     return row + size - 1 < 10;
+  //   }
+  // };
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.SHIP,
-    drop: (itme) => props.placeShip([props.row, props.col], itme.name),
+    drop: (item) => {
+      const success = props.placeShip(
+        [props.row, props.col],
+        item.name,
+        item.orientation
+      );
+      if (success) {
+        props.removeSelection(item.name);
+      }
+    },
     collect: (mon) => ({
       isOver: !!mon.isOver(),
     }),
@@ -33,10 +49,10 @@ const Cell = (props) => {
       : props.playerBoard && isShip
       ? classes.Player
       : null;
-
+  const styleActive = active && !props.disabled ? classes.Active : null;
   return (
     <div
-      className={[styleClass, classes.Cell].join(' ')}
+      className={[styleClass, classes.Cell, styleActive].join(' ')}
       onClick={() => handleClick()}
       ref={drop}
     >

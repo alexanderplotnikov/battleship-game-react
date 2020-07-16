@@ -1,5 +1,13 @@
 .Ship {
-  display: inline-block;
   margin: 0.5em;
+  display: flex;
+}
+
+.Vertical {
+  display: block;
+  display: inline-block;
+  background-color: blue;
+}
+.Horizontal > div {
   background-color: blue;
 }
