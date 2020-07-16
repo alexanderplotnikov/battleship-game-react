@@ -64,13 +64,15 @@ const gameboardFactory = () => {
         availableHits.splice(i, 1);
       }
     });
-
+    // let isSunk = null;
     if (board[row][col] === null) {
       board[row][col] = 'miss';
     } else if (typeof board[row][col] === 'object') {
       const index = board[row][col].index;
-      return board[row][col].ship.hit(index);
+      board[row][col].ship.hit(index);
+      return board[row][col].ship.isSunk();
     }
+    // return isSunk;
   };
   return { getBoard, placeShip, receiveAttack, getShots };
 };

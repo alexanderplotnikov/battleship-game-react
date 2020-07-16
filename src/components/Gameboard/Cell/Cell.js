@@ -18,6 +18,9 @@ const Cell = (props) => {
   //     return row + size - 1 < 10;
   //   }
   // };
+  const resetState = () => {
+    setActive(true);
+  };
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.SHIP,
     drop: (item) => {

@@ -11,6 +11,7 @@ class Battleship extends Component {
   comp = playerFactory();
 
   state = {
+    gameOn: true,
     playerBoard: this.player.getBoard(),
     compBoard: this.comp.getBoard(),
     playerTurn: true,
@@ -22,6 +23,9 @@ class Battleship extends Component {
       { name: 'submarine', size: 3 },
       { name: 'destroyer', size: 2 },
     ],
+    playerSunk: 0,
+    compSunk: 0,
+    playerWon: '',
   };
   resetState = {};
   componentDidMount() {
@@ -52,7 +56,19 @@ class Battleship extends Component {
     const availableHits = this.player.getShots();
     const randomShot = Math.floor(Math.random() * availableHits.length);
     const loc = availableHits[randomShot];
-    this.comp.attack(this.player, loc);
+    const attack = this.comp.attack(this.player, loc);
+    if (attack) {
+      let val = this.state.playerSunk;
+      val++;
+      this.setState({ playerSunk: val });
+      console.log(this.state.playerSunk);
+    }
+    this.determineWinner('Computer won!');
+  };
+  determineWinner = (winner) => {
+    if (this.state.playerSunk === 5 || this.state.compSunk === 5) {
+      this.setState({ playerWon: winner, gameOn: false });
+    }
   };
   takeTurnHandler = () => {
     this.setState({
@@ -73,7 +89,7 @@ class Battleship extends Component {
     return (
       <div>
         <button onClick={this.handleReset}>Reset Game</button>
-        <div>{this.state.playerTurn ? 'Player' : "Computer's"} turn</div>
+        <div>{this.state.playerWon}</div>
         <DndProvider backend={HTML5Backend}>
           <div className={classes.BattleshipControls}></div>
           <BattleshipControls ships={this.state.ships} />
@@ -85,7 +101,7 @@ class Battleship extends Component {
             disabled
           />
           <Gameboard
-            disabled={this.state.ships.length}
+            disabled={this.state.ships.length || !this.state.gameOn}
             board={this.state.compBoard}
             attack={this.handleAttack}
             placeShip={() => false}
