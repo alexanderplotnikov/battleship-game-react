@@ -11,7 +11,7 @@ it('defines cruser with length 3', () => {
 });
 
 it('hit()', () => {
-  expect(mockShip.hit(2)).toEqual([null, null, true]);
+  expect(mockShip.hit(2)).toEqual([false, false, true]);
 });
 it('isSunk()', () => {
   for (let i = 0; i < mockShip.getLength(); i++) {

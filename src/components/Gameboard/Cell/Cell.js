@@ -6,14 +6,12 @@ import { useDrop } from 'react-dnd';
 const Cell = (props) => {
   const [active, setActive] = useState(true);
   const handleClick = () => {
-    if (active && !props.disabled) {
-      props.clicked([props.row, props.col]);
-      setActive(false);
+    if (cell) {
+      if (cell.active && !props.disabled) {
+        props.clicked([props.row, props.col]);
+      }
+      cell.active = false;
     }
-  };
-
-  const resetState = () => {
-    setActive(true);
   };
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.SHIP,
@@ -36,21 +34,19 @@ const Cell = (props) => {
     }),
   });
   const cell = props.content;
-  let isShip = false;
-  let isHit = false;
-  if (cell !== null && cell !== 'miss' && cell !== undefined) {
-    isShip = cell.hasOwnProperty('ship');
-    isHit = cell.ship.isHit(cell.index);
-  }
-  const styleClass =
-    cell === 'miss'
+  let isHit, styleClass, styleActive;
+  if (cell) {
+    isHit = cell.ship ? cell.ship.isHit(cell.index) : false;
+    styleClass = cell.miss
       ? classes.Miss
       : isHit
       ? classes.Hit
-      : props.playerBoard && isShip
+      : props.playerBoard && cell.ship
       ? classes.Player
       : null;
-  const styleActive = active && !props.disabled ? classes.Active : null;
+    styleActive = cell.active && !props.disabled ? classes.Active : null;
+  }
+
   return (
     <div
       className={[styleClass, classes.Cell, styleActive].join(' ')}

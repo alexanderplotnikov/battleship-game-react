@@ -66,10 +66,10 @@ class Battleship extends Component {
     if (isSunk) {
       let val = this.state.compSunk + 1;
       this.setState({ compSunk: val });
-      console.log(this.state.compSunk);
     }
     this.computerAttack();
     this.takeTurnHandler();
+    console.log(this.state.compSunk);
   };
   handlePlaceShip = (loc, type, orientation) => {
     const success = this.player.placeShip(loc, type, orientation);

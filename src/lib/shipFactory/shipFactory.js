@@ -15,7 +15,7 @@ const shipFactory = (type) => {
   const ship = {
     name: type,
     length: size,
-    hitStatus: new Array(size).fill(null),
+    hitStatus: new Array(size).fill(false),
   };
   const getName = () => ship.name;
   const getLength = () => ship.length;
@@ -24,7 +24,7 @@ const shipFactory = (type) => {
     return ship.hitStatus;
   };
   const isHit = (pos) => ship.hitStatus[pos];
-  const isSunk = () => !ship.hitStatus.includes(null);
+  const isSunk = () => !ship.hitStatus.includes(false);
   return { getLength, hit, isSunk, isHit, getName };
 };
 

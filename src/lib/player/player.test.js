@@ -13,5 +13,5 @@ it('player attacks opponent', () => {
   expect(comp.getBoard()[3][3].ship.getName()).toMatch('carrier');
   expect(comp.getBoard()[3][3].ship.isHit(0)).toBe(true);
   expect(comp.getBoard()[4][3].ship.isHit(1)).toBe(true);
-  expect(comp.getBoard()[3][4]).toMatch('miss');
+  expect(comp.getBoard()[3][4].miss).toBe(true);
 });

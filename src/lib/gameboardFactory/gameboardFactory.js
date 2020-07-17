@@ -3,7 +3,15 @@ import Ship from '../shipFactory/shipFactory';
 const gameboardFactory = () => {
   const board = new Array(10);
   for (let i = 0; i < board.length; i++) {
-    board[i] = new Array(10).fill(null);
+    board[i] = new Array(10);
+    for (let j = 0; j < board[i].length; j++) {
+      board[i][j] = {
+        miss: false,
+        active: true,
+        ship: false,
+        index: null,
+      };
+    }
   }
   const availableHits = board
     .map((row, r) => {
@@ -26,10 +34,10 @@ const gameboardFactory = () => {
     const ship = Ship(type);
     const isHorizontal = orientation === 'horizontal' ? true : false;
     const placeble = isPlaceble(loc, ship.getLength(), isHorizontal);
-
     if (placeble) {
       placeble.forEach(([row, col], i) => {
-        board[row][col] = { index: i, ship };
+        board[row][col].ship = ship;
+        board[row][col].index = i;
       });
       return true;
     } else {
@@ -41,7 +49,8 @@ const gameboardFactory = () => {
     const coordinates = [];
     if (isHorizontal) {
       for (let i = 0; i < size; i++) {
-        if (board[row][col + i] === null) {
+        if (col + i > 9) return false;
+        if (board[row][col + i].ship === false) {
           coordinates.push([row, col + i]);
         } else {
           return false;
@@ -50,7 +59,7 @@ const gameboardFactory = () => {
     } else {
       for (let i = 0; i < size; i++) {
         if (row + i > 9) return false;
-        if (board[row + i][col] === null) {
+        if (board[row + i][col].ship === false) {
           coordinates.push([row + i, col]);
         } else {
           return false;
@@ -65,15 +74,13 @@ const gameboardFactory = () => {
         availableHits.splice(i, 1);
       }
     });
-    // let isSunk = null;
-    if (board[row][col] === null) {
-      board[row][col] = 'miss';
-    } else if (typeof board[row][col] === 'object') {
+    if (board[row][col].ship === false) {
+      board[row][col].miss = true;
+    } else if (typeof board[row][col].ship === 'object') {
       const index = board[row][col].index;
       board[row][col].ship.hit(index);
       return board[row][col].ship.isSunk();
     }
-    // return isSunk;
   };
   return { getBoard, placeShip, receiveAttack, getShots };
 };
