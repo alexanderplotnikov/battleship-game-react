@@ -11,24 +11,22 @@ const Cell = (props) => {
       setActive(false);
     }
   };
-  // const canPlace = ([row, col], size, orientation) => {
-  //   if (orientation === 'horizontal') {
-  //     return col + size - 1 < 10;
-  //   } else {
-  //     return row + size - 1 < 10;
-  //   }
-  // };
+
   const resetState = () => {
     setActive(true);
   };
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.SHIP,
     drop: (item) => {
-      const success = props.placeShip(
-        [props.row, props.col],
-        item.name,
-        item.orientation
-      );
+      let success;
+      if (props.placeShip) {
+        success = props.placeShip(
+          [props.row, props.col],
+          item.name,
+          item.orientation
+        );
+      }
+
       if (success) {
         props.removeSelection(item.name);
       }

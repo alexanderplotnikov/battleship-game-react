@@ -49,6 +49,7 @@ const gameboardFactory = () => {
       }
     } else {
       for (let i = 0; i < size; i++) {
+        if (row + i > 9) return false;
         if (board[row + i][col] === null) {
           coordinates.push([row + i, col]);
         } else {

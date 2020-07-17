@@ -30,7 +30,28 @@ class Battleship extends Component {
   resetState = {};
   componentDidMount() {
     this.resetState = { ...this.state };
+    this.placeCompShip();
   }
+  placeCompShip = () => {
+    const newShips = [...this.state.ships];
+    const availableHits = this.player.getShots();
+
+    while (newShips.length) {
+      newShips.forEach((ship, i) => {
+        let rand = Math.round(Math.random());
+        let randOrientation = rand === 1 ? 'horizontal' : 'vertical';
+        let randomPlace = Math.floor(Math.random() * availableHits.length);
+        let success = this.comp.placeShip(
+          availableHits[randomPlace],
+          ship.name,
+          randOrientation
+        );
+        if (success) {
+          newShips.splice(i, 1);
+        }
+      });
+    }
+  };
   handleReset = () => {
     this.player = { ...playerFactory() };
     this.comp = { ...playerFactory() };
@@ -41,7 +62,12 @@ class Battleship extends Component {
     });
   };
   handleAttack = (loc) => {
-    this.player.attack(this.comp, loc);
+    const isSunk = this.player.attack(this.comp, loc);
+    if (isSunk) {
+      let val = this.state.compSunk + 1;
+      this.setState({ compSunk: val });
+      console.log(this.state.compSunk);
+    }
     this.computerAttack();
     this.takeTurnHandler();
   };
@@ -63,20 +89,15 @@ class Battleship extends Component {
       this.setState({ playerSunk: val });
       console.log(this.state.playerSunk);
     }
-    this.determineWinner('Computer won!');
   };
-  determineWinner = (winner) => {
-    if (this.state.playerSunk === 5 || this.state.compSunk === 5) {
-      this.setState({ playerWon: winner, gameOn: false });
-    }
-  };
+
   takeTurnHandler = () => {
     this.setState({
       playerTurn: !this.state.playerTurn,
       compTurn: !this.state.compTurn,
     });
   };
-  handleShipSlection = (type) => {
+  handleShipSelection = (type) => {
     this.state.ships.forEach((ship, i) => {
       if (Object.values(ship)[0] === type) {
         const newShips = [...this.state.ships];
@@ -86,6 +107,14 @@ class Battleship extends Component {
     });
   };
   render() {
+    const determineWinner = () => {
+      if (this.state.playerSunk === 5 && this.state.gameOn) {
+        this.setState({ playerWon: 'Computer won', gameOn: false });
+      } else if (this.state.compSunk === 5 && this.state.gameOn) {
+        this.setState({ playerWon: 'Player won', gameOn: false });
+      }
+    };
+    determineWinner();
     return (
       <div>
         <button onClick={this.handleReset}>Reset Game</button>
@@ -96,7 +125,7 @@ class Battleship extends Component {
           <Gameboard
             board={this.state.playerBoard}
             placeShip={this.handlePlaceShip}
-            selected={this.handleShipSlection}
+            selected={this.handleShipSelection}
             playerBoard
             disabled
           />
