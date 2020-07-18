@@ -21,7 +21,11 @@ const Gameboard = (props) => {
       );
     });
   });
-  return <div className={classes.Gameboard}>{cells}</div>;
+
+  return (
+    <div className={props.show ? classes.Gameboard : classes.Hide}>{cells}</div>
+    //<div className={classes.Gameboard}>{cells}</div>
+  );
 };
 
 export default Gameboard;

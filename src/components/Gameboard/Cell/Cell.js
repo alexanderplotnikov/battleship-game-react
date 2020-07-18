@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classes from './Cell.module.css';
 
 import { ItemTypes } from '../../../utils/items/constants';
 import { useDrop } from 'react-dnd';
 const Cell = (props) => {
-  const [active, setActive] = useState(true);
   const handleClick = () => {
     if (cell) {
       if (cell.active && !props.disabled) {

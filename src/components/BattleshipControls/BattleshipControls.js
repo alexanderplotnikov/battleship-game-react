@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Ship from './Ship/Ship';
-
+import classes from './BattleshipControls.module.css';
 const BattleshipControls = (props) => {
   const [orientation, setOrientation] = useState('horizontal');
 
@@ -17,15 +17,15 @@ const BattleshipControls = (props) => {
   const handleClick = () => {
     setOrientation(orientation === 'horizontal' ? 'vertical' : 'horizontal');
   };
-
+  const orientationBtn =
+    orientation === 'horizontal' ? 'vertical' : 'horizontal';
   return (
-    <div>
-      <label htmlFor="orientation">
-        Flip
-        <br />
-        <input id="orientation" type="checkbox" onClick={handleClick} />
-      </label>
-      {ships}
+    <div className={props.show ? classes.BattleshipControls : classes.Hide}>
+      <div>
+        <button onClick={handleClick}>Switch to {orientationBtn}</button>
+
+        {ships}
+      </div>
     </div>
   );
 };
