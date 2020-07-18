@@ -3,6 +3,7 @@ import Gameboard from '../../components/Gameboard/Gameboard';
 import classes from './Battleship.module.css';
 import playerFactory from '../../lib/player/player';
 import BattleshipControls from '../../components/BattleshipControls/BattleshipControls';
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -23,8 +24,8 @@ class Battleship extends Component {
       { name: 'submarine', size: 3 },
       { name: 'destroyer', size: 2 },
     ],
-    playerSunk: 0,
-    compSunk: 0,
+    playerSunk: 4,
+    compSunk: 4,
     playerWon: '',
   };
   resetState = {};
@@ -33,7 +34,9 @@ class Battleship extends Component {
     this.placeCompShip();
   }
   placeCompShip = () => {
-    const newShips = [...this.state.ships];
+    const newShips = [...this.resetState.ships];
+    console.log(newShips);
+
     const availableHits = this.player.getShots();
 
     while (newShips.length) {
@@ -60,6 +63,7 @@ class Battleship extends Component {
       playerBoard: this.player.getBoard(),
       compBoard: this.comp.getBoard(),
     });
+    this.placeCompShip();
   };
   handleAttack = (loc) => {
     const isSunk = this.player.attack(this.comp, loc);
@@ -69,7 +73,6 @@ class Battleship extends Component {
     }
     this.computerAttack();
     this.takeTurnHandler();
-    console.log(this.state.compSunk);
   };
   handlePlaceShip = (loc, type, orientation) => {
     const success = this.player.placeShip(loc, type, orientation);
@@ -87,7 +90,6 @@ class Battleship extends Component {
       let val = this.state.playerSunk;
       val++;
       this.setState({ playerSunk: val });
-      console.log(this.state.playerSunk);
     }
   };
 
@@ -109,33 +111,46 @@ class Battleship extends Component {
   render() {
     const determineWinner = () => {
       if (this.state.playerSunk === 5 && this.state.gameOn) {
-        this.setState({ playerWon: 'Computer won', gameOn: false });
+        this.setState({ playerWon: 'Computer', gameOn: false });
       } else if (this.state.compSunk === 5 && this.state.gameOn) {
-        this.setState({ playerWon: 'Player won', gameOn: false });
+        this.setState({ playerWon: 'Player', gameOn: false });
       }
     };
     determineWinner();
     return (
-      <div>
-        <button onClick={this.handleReset}>Reset Game</button>
-        <div>{this.state.playerWon}</div>
+      <div className={classes.Battleship}>
+        <Sidebar
+          text={this.state.playerWon}
+          clicked={this.handleReset}
+          left
+          show={!this.state.gameOn}
+        />
+        <Sidebar show={!this.state.gameOn} />
+
         <DndProvider backend={HTML5Backend}>
-          <div className={classes.BattleshipControls}></div>
-          <BattleshipControls ships={this.state.ships} />
+          <BattleshipControls
+            ships={this.state.ships}
+            show={this.state.ships.length}
+          />
           <Gameboard
             board={this.state.playerBoard}
             placeShip={this.handlePlaceShip}
             selected={this.handleShipSelection}
             playerBoard
             disabled
+            show
           />
           <Gameboard
             disabled={this.state.ships.length || !this.state.gameOn}
             board={this.state.compBoard}
             attack={this.handleAttack}
             placeShip={() => false}
+            show={!this.state.ships.length}
           />
         </DndProvider>
+        {this.state.ships.length < 5 ? (
+          <button onClick={this.handleReset}>Reset Game</button>
+        ) : null}
       </div>
     );
   }
