@@ -1,0 +1,17 @@
+.BattleshipControls {
+  display: block;
+  width: 280px;
+  height: 400px;
+}
+.BattleshipControls button {
+  display: block;
+  margin-left: 8px;
+}
+
+.BattleshipControls > div {
+  margin-top: 5em;
+}
+
+.Hide {
+  display: none;
+}

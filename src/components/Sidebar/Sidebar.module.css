@@ -1,0 +1,67 @@
+.Sidebar {
+  position: absolute;
+  transition: transform 1s ease-out;
+  transform: translateX(-50%);
+}
+
+.LeftOpen > button {
+  position: absolute;
+  width: 180px;
+  top: 25%;
+  margin-right: -90px;
+  right: 0px;
+  padding: 0.75em 1em;
+  background-color: transparent;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: black;
+  border: 2px solid red;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.LeftOpen > button:hover {
+  background-color: red;
+  color: white;
+  opacity: 0.65;
+}
+.LeftClose > button {
+  display: none;
+}
+.Sidebar > h2 {
+  position: absolute;
+  top: 1em;
+  padding: 0 0.15em;
+  font-size: 2.3em;
+  font-family: 'Black Ops One', cursive;
+}
+.LeftOpen h2 {
+  width: 400px;
+  text-align: center;
+  right: 0;
+  margin-right: -200px;
+}
+
+.LeftOpen {
+  right: 50%;
+  transform: translateX(0%);
+  text-align: end;
+  z-index: 100;
+}
+
+.RightOpen {
+  left: 50%;
+  transform: translateX(0%);
+  /* 1px gap fix for bigger screens */
+  margin-left: -1px;
+  z-index: 90;
+}
+
+.LeftClose {
+  transform: translateX(-150%);
+  z-index: 100;
+}
+.RightClose {
+  transform: translateX(150%);
+  z-index: 90;
+}
